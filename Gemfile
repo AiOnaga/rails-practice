@@ -69,7 +69,7 @@ end
 gem "rails-controller-testing"
 
 group :production do
-  gem "pg", "1.3.5"
+  gem "pg", "1.5.8"
 end
 
 
