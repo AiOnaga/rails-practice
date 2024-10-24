@@ -103,8 +103,8 @@ Rails.application.configure do
 
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.delivery_method = :smtp
-  host = 'https://rails-practice-2.onrender.com'
-  config.action_mailer.default_url_options = { host: host }
+  host = 'rails-practice-2.onrender.com' # Renderのアプリホスト
+  config.action_mailer.default_url_options = { host: host, protocol: 'https' }
   ActionMailer::Base.smtp_settings = {
     :port           => 587,
     :address        => 'smtp.mailgun.org',
