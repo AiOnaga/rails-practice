@@ -101,6 +101,9 @@ Rails.application.configure do
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
   config.force_ssl = true
 
+  # アップロードされたファイルをAWSに保存する
+  config.active_storage.service = :amazon
+
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.delivery_method = :smtp
   host = 'rails-practice-2.onrender.com' # Renderのアプリホスト

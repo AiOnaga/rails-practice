@@ -9,7 +9,14 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
-    redirect_to root_url and return unless @user.activated?
+
+    # ユーザーが未認証の場合、root_urlにリダイレクト
+    unless @user.activated?
+      redirect_to root_url and return
+    end
+
+    # 認証済みの場合、ユーザーの投稿を取得しページネーションを適用
+    @microposts = @user.microposts.paginate(page: params[:page])
   end
 
   def new
@@ -51,19 +58,13 @@ class UsersController < ApplicationController
     params.require(:user).permit(:name, :email, :password, :password_confirmation)
   end
 
-  def logged_in_user
-    unless logged_in?
-      store_location
-      flash[:danger] = "Please log in."
-      redirect_to login_url, status: :see_other
-    end
-  end
-
+  # 正しいユーザーかどうかを確認
   def correct_user
     @user = User.find(params[:id])
     redirect_to(root_url, status: :see_other) unless current_user?(@user)
   end
 
+  # 管理者かどうかを確認
   def admin_user
     redirect_to(root_url, status: :see_other) unless current_user.admin?
   end
