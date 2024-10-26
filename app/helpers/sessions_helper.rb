@@ -16,18 +16,22 @@ module SessionsHelper
   def current_user
     if (user_id = session[:user_id])
       user = User.find_by(id: user_id)
-      @current_user ||= user if session[:session_token] == user.session_token
+      # userが存在し、かつsession_tokenが一致する場合のみ@current_userを設定
+      @current_user ||= user if user && session[:session_token] == user.session_token
     elsif (user_id = cookies.encrypted[:user_id])
       user = User.find_by(id: user_id)
+      # userが存在し、remember_tokenが正しい場合にログイン状態を設定
       if user && user.authenticated?(:remember, cookies[:remember_token])
         log_in user
         @current_user = user
       end
     end
   end
+
   def current_user?(user)
     user && user == current_user
   end
+
   # ユーザーがログインしていればtrue、その他ならfalseを返す
   def logged_in?
     !current_user.nil?
